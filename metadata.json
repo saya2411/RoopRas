@@ -1,5 +1,5 @@
 {
   "name": "RoopRas",
-  "description": "Infinite minimalist black-and-white avatar generator powered by Google Imagen 4.0. The Essence of Form.",
+  "description": "Minimalist avatar generator and Studio Ghibli image transformer powered by Google Gemini AI.",
   "requestFramePermissions": []
 }
