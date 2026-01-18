@@ -1,7 +1,7 @@
 
-# 👤 MonoFace: Minimalist Avatar Generator
+# 👤 RoopRas: Minimalist Avatar Generator
 
-MonoFace is an AI-driven tool that generates unique, high-contrast, monochrome avatars in the popular "Notion Faces" aesthetic. Built with React and powered by Google's **Imagen 4.0** through the Gemini API.
+RoopRas is an AI-driven tool that generates unique, high-contrast, monochrome avatars in the popular "Notion Faces" aesthetic. Built with React and powered by Google's **Imagen 4.0** through the Gemini API.
 
 ## 🚀 Overview
 
