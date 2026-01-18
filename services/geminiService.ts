@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, GenerateImagesResponse } from "@google/genai";
 
 /**
@@ -38,7 +39,6 @@ export const generateRandomNotionFace = async (
         numberOfImages: 1,
         outputMimeType: 'image/png', // PNG is suitable for line art and black & white images
         aspectRatio: '1:1', // Notion Faces are typically square
-        colorPalette: 'BLACK_AND_WHITE', // Explicitly enforce monochrome output
       },
     });
 
