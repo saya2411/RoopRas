@@ -86,7 +86,7 @@ const App: React.FC = () => {
       <div className="bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-xl p-8 flex flex-col items-center">
         
         <header className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-black mb-2 uppercase italic">RoopRas</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight text-black mb-2 italic">RoopRas</h1>
           <p className="text-gray-500 text-sm font-medium tracking-wide uppercase">The Essence of Form</p>
         </header>
 
