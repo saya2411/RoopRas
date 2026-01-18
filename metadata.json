@@ -1,0 +1,5 @@
+{
+  "name": "MonoFace: Minimalist Avatar Generator",
+  "description": "A high-performance web app generating infinite, unique, strictly monochrome Notion-style avatars using Google Imagen 4.0.",
+  "requestFramePermissions": []
+}
