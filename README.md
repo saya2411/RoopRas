@@ -1,37 +1,63 @@
-# 👤 RoopRas: The Essence of Form
+# RoopRas - The Essence of Form
 
-RoopRas (formerly MonoFace) is an AI-driven tool that generates unique, high-contrast, monochrome avatars in the popular "Notion Faces" aesthetic. Built with React and powered by Google's **Imagen 4.0** through the Gemini API.
+RoopRas is a minimalist generative interface designed to create unique, Notion-style avatars (Roops) with a single click. Built with React, Tailwind CSS, and powered by Google's Gemini 2.5 Flash Image model, it offers a clean and focused experience for generating abstract, high-contrast digital identities.
 
-## 🚀 Overview
+## ✨ Features
 
-The goal of RoopRas is to provide a seamless, one-click solution for creating minimalist digital identities. By utilizing dynamic prompt randomization, the app ensures that no two avatars are exactly alike, while strictly adhering to a pure black-and-white, stippled art style.
+- **Minimalist Generation:** Create abstract, black-and-white avatars inspired by the "Notion Faces" aesthetic.
+- **Themed Loading Experience:** Watch your "Roop" come to life with a themed loading sequence (Adding Primer, Applying Foundation, Final Glow, etc.).
+- **Brutalist UI:** A bold, high-contrast interface with thick borders and sharp shadows.
+- **Instant Export:** Download your generated avatars directly as PNG files.
+- **Powered by Gemini:** Uses the `gemini-2.5-flash-image` model for fast and creative image generation.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/roopras.git
+   cd roopras
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up your environment variables:
+   Create a `.env` file in the root directory and add your Gemini API key:
+   ```env
+   API_KEY=your_gemini_api_key_here
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open your browser and navigate to `http://localhost:3000`.
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React 19, TypeScript, Tailwind CSS
-- **AI Engine:** Google Gemini API (Imagen 4.0)
-- **Styling:** Dynamic Prompt Engineering for aesthetic consistency
+- **Frontend:** React, TypeScript, Tailwind CSS
+- **Animations:** Motion (framer-motion)
+- **AI Integration:** @google/genai (Gemini 2.5 Flash Image)
+- **Icons:** Lucide React
 
-## ✨ Benefits
+## 🎨 Design Philosophy
 
-- **Strict Aesthetic Control:** Unlike general-purpose AI generators, RoopRas is hard-coded to produce only pure black-and-white images. This ensures a consistent look for design systems or team directories.
-- **Privacy-First Identity:** Provides a creative way for users to represent themselves online without using personal photographs.
-- **Infinite Variety:** Uses a modular prompt construction system (randomizing head shapes, eyes, mouths, and accessories) to prevent repetitive outputs.
-- **Zero Configuration:** No sliders or complex prompts needed. One button handles the entire creative process.
-- **Instant Download:** Generates high-quality PNGs ready for immediate use.
+RoopRas follows a "Brutalist Minimalist" design language. It celebrates structure, bold typography, and a restricted color palette to keep the focus entirely on the generative art.
 
-## ⚠️ Cons & Limitations
+## 📄 License
 
-- **Strictly Monochrome:** By design, the app does not support colors.
-- **API Dependency:** Requires an active connection to the Google Gemini API.
-- **Fixed Perspective:** Optimized for front-facing minimalist portraits.
-
-## ⚙️ Setup
-
-1. Clone the repository.
-2. Ensure you have a valid Google Gemini API Key.
-3. Set your environment variable: `process.env.API_KEY`.
-4. Run the development server to start generating.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-*Created with ❤️ for the minimalist community. RoopRas v1.1*
+
+*Created with ❤️ using Google AI Studio Build.*
