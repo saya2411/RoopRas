@@ -1,87 +1,124 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { generateRandomNotionFace } from './services/geminiService';
 
-const App: React.FC = () => {
-  const [notionFaceBase64, setNotionFaceBase64] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+const LOADING_STEPS = [
+  'Adding Primer...',
+  'Applying Foundation...',
+  'Blending Concealer...',
+  'Setting Powder...',
+  'Adding Lip Tint...',
+  'Defining Brows...',
+  'Final Glow...',
+];
 
-  const handleGenerateClick = useCallback(async () => {
+const App: React.FC = () => {
+  const [resultImage, setResultImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loadingStep, setLoadingStep] = useState(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (loading) {
+      setLoadingStep(0);
+      interval = setInterval(() => {
+        setLoadingStep((prev) => (prev + 1) % LOADING_STEPS.length);
+      }, 1500);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  const handleProcess = async () => {
     setLoading(true);
     setError(null);
-    setNotionFaceBase64(null);
-
     try {
-      const result = await generateRandomNotionFace();
-      if (result) {
-        setNotionFaceBase64(result);
-      } else {
-        setError('No image was returned. Please try again.');
-      }
-    } catch (err: any) {
+      const res = await generateRandomNotionFace('gemini-2.5-flash-image');
+      if (res) setResultImage(res);
+    } catch (err: unknown) {
       console.error("Generation error:", err);
-      setError(`Failed to generate: ${err.message || 'An unknown error occurred.'}`);
+      if (err instanceof Error) {
+        setError(`Failed to generate: ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[90vh] bg-white rounded-lg shadow-xl p-6 md:p-8 lg:p-10 w-full max-w-xl">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 text-center italic">
-        RoopRas
-      </h1>
-      <p className="text-gray-600 mb-8 text-center max-w-md">
-        Click below to generate a unique, minimalist "Roop" (form) using our generative essence.
-      </p>
+    <main className="w-full max-w-xl mx-auto px-4">
+      <div className="bg-white border-2 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-2xl p-8 flex flex-col items-center">
+        
+        <header className="text-center mb-10 w-full">
+          <h1 className="text-5xl font-black tracking-tighter text-black mb-2 italic">RoopRas</h1>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-[0.3em] mb-8">The Essence of Form</p>
+        </header>
 
-      <div className="flex flex-col items-center justify-center w-full">
-        <div className="w-64 h-64 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden bg-gray-50 flex-shrink-0">
-          {loading ? (
-            <div className="flex flex-col items-center">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-black"></div>
-              <p className="mt-2 text-gray-500 text-sm font-bold uppercase tracking-widest">Synthesizing...</p>
+        <div className="w-full mb-10 flex flex-col items-center">
+          <div className="flex flex-col items-center w-full max-w-[320px]">
+            <h2 className="text-xs font-black uppercase mb-4 tracking-widest text-gray-400">The Result</h2>
+            <div className="w-full aspect-square border-2 border-black rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+              {loading ? (
+                <div className="text-center">
+                  <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin mx-auto"></div>
+                </div>
+              ) : resultImage ? (
+                <img 
+                  src={`data:image/png;base64,${resultImage}`} 
+                  className="w-full h-full object-contain" 
+                  alt="RoopResult" 
+                />
+              ) : (
+                <div className="text-gray-300 italic text-sm text-center px-4">Awaiting creation...</div>
+              )}
             </div>
-          ) : notionFaceBase64 ? (
-            <img
-              src={`data:image/png;base64,${notionFaceBase64}`}
-              alt="RoopRas Face"
-              className="max-w-full max-h-full object-contain"
-            />
-          ) : (
-            <span className="text-gray-400 text-center p-4 italic">Click "Generate" to create a Roop</span>
+          </div>
+        </div>
+
+        <div className="w-full space-y-4">
+          <button
+            onClick={handleProcess}
+            disabled={loading}
+            className={`w-full py-5 border-2 border-black font-black text-sm uppercase tracking-widest transition-all
+              ${loading
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed translate-y-1 shadow-none'
+                : 'bg-black text-white hover:bg-white hover:text-black active:translate-y-1 active:shadow-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'
+              }`}
+          >
+            {loading ? LOADING_STEPS[loadingStep] : 'Create New Roop'}
+          </button>
+
+          {resultImage && !loading && (
+            <div className="flex gap-4">
+              <a
+                href={`data:image/png;base64,${resultImage}`}
+                download="roopras.png"
+                className="flex-1 text-center py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none bg-white" 
+              >
+                Download Export
+              </a>
+              <button 
+                onClick={() => setResultImage(null)}
+                className="px-6 py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest bg-gray-100 hover:bg-white"
+              >
+                Reset
+              </button>
+            </div>
           )}
         </div>
-        <button
-          onClick={handleGenerateClick}
-          disabled={loading}
-          className={`mt-6 px-8 py-4 font-extrabold uppercase tracking-widest rounded-none border-2 border-black transition-all
-            ${loading
-              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              : 'bg-black text-white hover:bg-white hover:text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1'
-            }`}
-        >
-          {loading ? 'Processing...' : 'Generate New Roop'}
-        </button>
 
-        {notionFaceBase64 && !loading && (
-          <a
-            href={`data:image/png;base64,${notionFaceBase64}`}
-            download="roopras-face.png"
-            className="mt-4 text-xs font-bold uppercase tracking-widest underline hover:text-gray-600 transition-colors"
-          >
-            Download PNG
-          </a>
+        {error && (
+          <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full">
+            <span className="font-bold uppercase">ERROR:</span> {error}
+          </div>
         )}
       </div>
 
-      {error && (
-        <div className="mt-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg w-full max-w-md text-center text-xs font-mono">
-          <p className="font-bold">ERROR:</p>
-          <p>{error}</p>
-        </div>
-      )}
-    </div>
+      <footer className="mt-12 text-center pb-12">
+        <p className="text-[9px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60">
+          RoopRas v1.3 &bull; Minimalist Generative Interface
+        </p>
+      </footer>
+    </main>
   );
 };
 

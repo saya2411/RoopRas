@@ -1,5 +1,5 @@
 {
-  "name": "RoopRas",
-  "description": "Minimalist avatar generator and Studio Ghibli image transformer powered by Google Gemini AI.",
+  "name": "RoopRas - AI Avatar Generator",
+  "description": "Generate unique, minimalist avatars and transform images with Google Gemini AI.",
   "requestFramePermissions": []
 }
