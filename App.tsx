@@ -13,6 +13,8 @@ const LOADING_STEPS = [
 
 const App: React.FC = () => {
   const [resultImage, setResultImage] = useState<string | null>(null);
+  const [recentRoops, setRecentRoops] = useState<string[]>([]);
+  const [showGallery, setShowGallery] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loadingStep, setLoadingStep] = useState(0);
@@ -33,7 +35,13 @@ const App: React.FC = () => {
     setError(null);
     try {
       const res = await generateRandomNotionFace('gemini-2.5-flash-image');
-      if (res) setResultImage(res);
+      if (res) {
+        setResultImage(res);
+        setRecentRoops((prev) => {
+          if (prev[0] === res) return prev;
+          return [res, ...prev].slice(0, 5);
+        });
+      }
     } catch (err: unknown) {
       console.error("Generation error:", err);
       if (err instanceof Error) {
@@ -42,6 +50,11 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const selectFromGallery = (img: string) => {
+    setResultImage(img);
+    setShowGallery(false);
   };
 
   return (
@@ -104,7 +117,67 @@ const App: React.FC = () => {
               </button>
             </div>
           )}
+
+          {recentRoops.length > 0 && (
+            <button
+              onClick={() => setShowGallery(true)}
+              className="w-full py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest bg-white hover:bg-gray-50 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none"
+            >
+              Recent Roops
+            </button>
+          )}
         </div>
+
+        {showGallery && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <div className="bg-white border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] rounded-2xl p-8 w-full max-w-md relative animate-in fade-in zoom-in duration-200">
+              <button 
+                onClick={() => setShowGallery(false)}
+                className="absolute top-4 right-4 w-8 h-8 border-2 border-black flex items-center justify-center font-black hover:bg-black hover:text-white transition-colors"
+              >
+                &times;
+              </button>
+              
+              <h3 className="text-xl font-black uppercase tracking-tighter mb-8 italic">Recent Roops</h3>
+              
+              <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                {recentRoops.map((img, idx) => (
+                  <div key={idx} className="flex items-center gap-4 p-3 border-2 border-black rounded-xl hover:bg-gray-50 transition-colors group">
+                    <div className="w-20 h-20 border-2 border-black rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                      <img 
+                        src={`data:image/png;base64,${img}`} 
+                        className="w-full h-full object-cover" 
+                        alt={`Recent ${idx}`} 
+                      />
+                    </div>
+                    <div className="flex-1 flex flex-col gap-2">
+                      <button
+                        onClick={() => selectFromGallery(img)}
+                        className="text-[10px] font-black uppercase tracking-widest text-left hover:underline"
+                      >
+                        View in Main
+                      </button>
+                      <a
+                        href={`data:image/png;base64,${img}`}
+                        download={`roopras-${idx}.png`}
+                        className="text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-black transition-colors"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setShowGallery(false)}
+                className="w-full mt-8 py-4 border-2 border-black bg-black text-white font-black text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
+              >
+                Close Gallery
+              </button>
+            </div>
+          </div>
+        )}
 
         {error && (
           <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full">
