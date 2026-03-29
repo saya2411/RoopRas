@@ -4,12 +4,13 @@ import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
  * Generates a random Notion Faces-style avatar.
  */
 export const generateRandomNotionFace = async (modelName: string): Promise<string | null> => {
-  if (!process.env.API_KEY) {
-    throw new Error("API_KEY is not set.");
+  const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
+  if (!apiKey) {
+    throw new Error("API_KEY is not set. Please check your environment variables.");
   }
 
   // Create a new GoogleGenAI instance right before making an API call to ensure it always uses the most up-to-date API key from the dialog.
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey });
 
   const headShapes = ["a rounded square head", "an irregular blob-like head", "a slightly squarish head with soft corners"];
   const eyeStyles = ["two simple dot eyes", "two small circular eyes", "two short horizontal line eyes", "two small oval eyes", "two half-moon upward-curved eyes"];
