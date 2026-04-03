@@ -31,11 +31,19 @@ async function startServer() {
       return res.status(500).json({ error: "No valid API keys found on server." });
     }
 
-    const modelsToTry = [modelName, 'gemini-3.1-flash-image-preview'];
+    const modelsToTry = [
+      'gemini-3.1-flash-image-preview',
+      'gemini-2.5-flash-image',
+      'gemini-3-pro-image-preview'
+    ];
     let lastError: any = null;
+    const debugInfo: any[] = [];
 
     // Try each key
-    for (let apiKey of apiKeys) {
+    for (let i = 0; i < apiKeys.length; i++) {
+      const apiKey = apiKeys[i];
+      const keySnippet = apiKey.substring(0, 4) + "..." + apiKey.substring(apiKey.length - 4);
+
       for (const model of modelsToTry) {
         try {
           const ai = new GoogleGenAI({ apiKey });
@@ -63,18 +71,22 @@ async function startServer() {
 
           const imageData = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
           if (imageData) {
-            return res.json({ data: imageData });
+            return res.json({ data: imageData, modelUsed: model });
           }
         } catch (error: any) {
           lastError = error;
           const errorMessage = error?.message || String(error);
-          console.warn(`Server-side attempt failed: ${errorMessage}`);
-          // Continue to next model/key
+          debugInfo.push({ key: keySnippet, model, error: errorMessage });
+          console.warn(`Server attempt failed [Key ${i+1}, Model ${model}]: ${errorMessage}`);
         }
       }
     }
 
-    res.status(429).json({ error: "All server-side keys exhausted.", details: lastError?.message });
+    res.status(429).json({ 
+      error: "All server-side keys and models exhausted.", 
+      details: lastError?.message,
+      debug: debugInfo 
+    });
   });
 
   // Vite middleware for development
