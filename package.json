@@ -4,15 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsx server.ts",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit && eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "tsc --noEmit && eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "start": "node server.ts"
   },
   "dependencies": {
     "@google/genai": "^1.35.0",
+    "express": "^5.2.1",
+    "path-browserify": "^1.0.1",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
@@ -20,6 +24,7 @@
     "@types/node": "^22.14.0",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
+    "@vercel/node": "^5.7.0",
     "@vitejs/plugin-react": "^5.0.0",
     "eslint": "^9.39.3",
     "eslint-plugin-react": "^7.37.5",
