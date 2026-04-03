@@ -58,16 +58,23 @@ async function startServer() {
       'gemini-2.5-flash-image',
       'gemini-3-pro-image-preview'
     ];
+    
+    // Shuffle keys to avoid hitting the same one first every time
+    const shuffledKeys = [...apiKeys].sort(() => Math.random() - 0.5);
+    
     let lastError: any = null;
     const debugInfo: any[] = [];
 
     // Try each key
-    for (let i = 0; i < apiKeys.length; i++) {
-      const apiKey = apiKeys[i];
+    for (let i = 0; i < shuffledKeys.length; i++) {
+      const apiKey = shuffledKeys[i];
       const keySnippet = apiKey.substring(0, 4) + "..." + apiKey.substring(apiKey.length - 4);
 
       for (const model of modelsToTry) {
         try {
+          // Add a tiny random delay (200-500ms) to look less like a bot
+          await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
+          
           const ai = new GoogleGenAI({ apiKey });
           
           const headShapes = ["a rounded square head", "an irregular blob-like head", "a slightly squarish head with soft corners"];
@@ -100,6 +107,8 @@ async function startServer() {
           const errorMessage = error?.message || String(error);
           debugInfo.push({ key: keySnippet, model, error: errorMessage });
           console.warn(`Server attempt failed [Key ${i+1}, Model ${model}]: ${errorMessage}`);
+          
+          // If it's a "limit: 0" error, it's a regional block, so we definitely want to try the next key
         }
       }
     }
