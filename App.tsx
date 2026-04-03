@@ -46,7 +46,18 @@ const App: React.FC = () => {
       }
     } catch (err: any) {
       console.error("Generation error:", err);
-      setError(err.message || "Failed to generate.");
+      
+      let friendlyMessage = err.message || "Failed to generate.";
+      
+      if (friendlyMessage.toLowerCase().includes("permission") || friendlyMessage.includes("403")) {
+        friendlyMessage = "Permission Denied. Please make sure you are logged into your Google Account to use this shared app, or try a different browser.";
+      } else if (friendlyMessage.toLowerCase().includes("quota") || friendlyMessage.includes("429")) {
+        friendlyMessage = "The daily limit for this app has been reached. Please try again later.";
+      } else if (friendlyMessage.toLowerCase().includes("region")) {
+        friendlyMessage = "Image generation might not be available in your current region yet.";
+      }
+
+      setError(friendlyMessage);
       if (err.details || err.tried) {
         setErrorDetails({
           details: err.details,
@@ -188,6 +199,11 @@ const App: React.FC = () => {
         {error && (
           <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full overflow-hidden">
             <div className="font-bold uppercase mb-1">ERROR: {error}</div>
+            {error.includes("Permission Denied") && (
+              <div className="mt-2 font-bold text-red-800 animate-pulse">
+                TIP: Try logging into your Google Account and refreshing the page!
+              </div>
+            )}
             {errorDetails && (
               <div className="opacity-70 mt-2 space-y-1">
                 {errorDetails.tried && (
@@ -202,9 +218,13 @@ const App: React.FC = () => {
         )}
       </div>
 
-      <footer className="mt-12 text-center pb-12">
-        <p className="text-[9px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60">
+      <footer className="mt-12 text-center pb-12 px-4">
+        <p className="text-[9px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60 mb-3">
           RoopRas v1.3 &bull; Minimalist Generative Interface
+        </p>
+        <p className="text-[8px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
+          Note: Standard security warnings on shared links are a platform feature of AI Studio. 
+          This app is safe and uses official Google Gemini models.
         </p>
       </footer>
     </main>
