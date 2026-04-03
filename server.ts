@@ -13,6 +13,28 @@ async function startServer() {
 
   app.use(express.json());
 
+  // Debug endpoint to check keys
+  app.get("/api/debug", (req, res) => {
+    const keys = [
+      process.env.VITE_API_KEY_1,
+      process.env.VITE_API_KEY_2,
+      process.env.VITE_API_KEY_3,
+      process.env.VITE_API_KEY,
+      process.env.API_KEY,
+      process.env.GEMINI_API_KEY
+    ].map((k, i) => ({
+      name: `Key_${i + 1}`,
+      present: !!k,
+      length: k?.length || 0
+    }));
+    
+    res.json({ 
+      env: process.env.NODE_ENV,
+      keysFound: keys.filter(k => k.present).length,
+      details: keys
+    });
+  });
+
   // API Route for Image Generation
   app.post("/api/generate", async (req, res) => {
     const { modelName } = req.body;
