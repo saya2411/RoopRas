@@ -218,7 +218,7 @@ const App: React.FC = () => {
         <p className="text-[11px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60 mb-3">
           RoopRas v1.3 &bull; Minimalist Generative Interface
         </p>
-        <p className="text-[12px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
+        <p className="text-[14px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
           Note: Standard security warnings on shared links are a platform feature of AI Studio. 
           This app is safe and uses official Google Gemini models.
         </p>
