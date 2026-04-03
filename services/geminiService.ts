@@ -10,29 +10,30 @@ export const generateRandomNotionFace = async (modelName: string): Promise<strin
   // Collect all possible keys from environment variables
   const apiKeys: string[] = [];
   
-  const numberedKeys = [
-    (import.meta as any).env.VITE_API_KEY_1,
-    (import.meta as any).env.VITE_API_KEY_2,
-    (import.meta as any).env.VITE_API_KEY_3
-  ].filter(k => k && k.length > 0);
+  // Try to get keys from process.env (defined in vite.config.ts) or import.meta.env
+  const k1 = (process.env as any).VITE_API_KEY_1 || (import.meta as any).env.VITE_API_KEY_1;
+  const k2 = (process.env as any).VITE_API_KEY_2 || (import.meta as any).env.VITE_API_KEY_2;
+  const k3 = (process.env as any).VITE_API_KEY_3 || (import.meta as any).env.VITE_API_KEY_3;
+  
+  const numberedKeys = [k1, k2, k3].filter(k => k && typeof k === 'string' && k.length > 5);
   apiKeys.push(...numberedKeys);
 
   if (apiKeys.length === 0) {
-    const viteKey = (import.meta as any).env.VITE_API_KEY;
-    if (viteKey) {
-      apiKeys.push(...viteKey.split(',').map((k: string) => k.trim()).filter((k: string) => k.length > 0));
+    const viteKey = (process.env as any).VITE_API_KEY || (import.meta as any).env.VITE_API_KEY;
+    if (viteKey && typeof viteKey === 'string') {
+      apiKeys.push(...viteKey.split(',').map((k: string) => k.trim()).filter((k: string) => k.length > 5));
     }
   }
 
   if (apiKeys.length === 0) {
-    const fallbackKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
-    if (fallbackKey) {
+    const fallbackKey = (process.env as any).API_KEY || (process.env as any).GEMINI_API_KEY;
+    if (fallbackKey && typeof fallbackKey === 'string' && fallbackKey.length > 5) {
       apiKeys.push(fallbackKey);
     }
   }
 
   if (apiKeys.length === 0) {
-    throw new Error("No API keys found. Please set VITE_API_KEY_1, VITE_API_KEY_2, or VITE_API_KEY_3.");
+    throw new Error("No valid API keys found. Please check your Vercel Environment Variables (VITE_API_KEY_1, etc.).");
   }
 
   let lastError: any = null;
@@ -77,10 +78,15 @@ export const generateRandomNotionFace = async (modelName: string): Promise<strin
       return null;
     } catch (error: any) {
       lastError = error;
-      if (error?.message?.includes('429') || error?.status === 429) {
-        console.warn(`Key ${index + 1} is rate limited. Trying next...`);
+      const errorMessage = error?.message || String(error);
+      const isRateLimit = errorMessage.includes('429') || error?.status === 429 || errorMessage.toLowerCase().includes('rate limit');
+      
+      if (isRateLimit) {
+        console.warn(`Key ${index + 1} is rate limited. Google says: "${errorMessage}". Trying next...`);
         continue;
       }
+      
+      console.error(`Key ${index + 1} failed with a non-rate-limit error:`, error);
       throw error;
     }
   }
