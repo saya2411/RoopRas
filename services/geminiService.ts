@@ -1,26 +1,14 @@
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-
-/**
- * Generates a random Notion Faces-style avatar.
- */
-// Keep track of the last successful key index across calls
-let currentKeyIndex = 0;
-
 import { GoogleGenAI } from "@google/genai";
 
 /**
  * Generates a random Notion Faces-style avatar.
  */
 export const generateRandomNotionFace = async (): Promise<any> => {
-  // Try to get the API key from various possible environment variables
-  // In Vite, client-side variables must be prefixed with VITE_
-  const apiKey = (import.meta as any).env.VITE_API_KEY_1 || 
-                 (import.meta as any).env.VITE_API_KEY || 
-                 (import.meta as any).env.VITE_GEMINI_API_KEY ||
-                 (process as any).env.GEMINI_API_KEY;
+  // Use the built-in Gemini API key provided by the AI Studio environment
+  const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    throw new Error("No API key found. Please ensure VITE_API_KEY_1 is set in your environment.");
+    throw new Error("Gemini API key not found. If you are running this outside of AI Studio, please set the GEMINI_API_KEY environment variable.");
   }
 
   const modelsToTry = [
@@ -32,7 +20,6 @@ export const generateRandomNotionFace = async (): Promise<any> => {
   const ai = new GoogleGenAI({ apiKey });
   let lastError: any = null;
 
-  // Try each model directly from the browser
   for (const modelName of modelsToTry) {
     try {
       const headShapes = ["a rounded square head", "an irregular blob-like head", "a slightly squarish head with soft corners"];
@@ -62,8 +49,7 @@ export const generateRandomNotionFace = async (): Promise<any> => {
       }
     } catch (error: any) {
       lastError = error;
-      console.warn(`Browser attempt failed for ${modelName}:`, error.message);
-      // If it's a quota error, try the next model immediately
+      console.warn(`Attempt failed for ${modelName}:`, error.message);
       continue;
     }
   }
