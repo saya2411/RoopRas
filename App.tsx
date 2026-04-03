@@ -211,27 +211,6 @@ const App: React.FC = () => {
         {error && (
           <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full overflow-hidden relative">
             <div className="font-bold uppercase mb-1">ERROR: {error}</div>
-            {error.includes("Please make sure you are logged into your Google Account") && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-white/95 backdrop-blur-md animate-in fade-in duration-300">
-                <div className="max-w-sm w-full bg-white border-4 border-black p-8 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] text-center">
-                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-black">
-                    <span className="text-3xl">👤</span>
-                  </div>
-                  <h2 className="text-2xl font-black uppercase tracking-tighter mb-4 italic">Login Required</h2>
-                  <p className="text-sm font-bold text-gray-600 leading-relaxed mb-8">
-                    To use this shared app, Google requires you to be logged into your account.
-                    <br/><br/>
-                    <span className="text-black underline decoration-2 underline-offset-4">Please log in to your Google Account and refresh this page.</span>
-                  </p>
-                  <button 
-                    onClick={() => window.location.reload()}
-                    className="w-full py-4 bg-black text-white font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black border-2 border-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
-                  >
-                    Refresh Page
-                  </button>
-                </div>
-              </div>
-            )}
             {errorDetails && (
               <div className="opacity-70 mt-2 space-y-1">
                 {errorDetails.tried && (
@@ -247,10 +226,10 @@ const App: React.FC = () => {
       </div>
 
       <footer className="mt-12 text-center pb-12 px-4">
-        <p className="text-[9px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60 mb-3">
+        <p className="text-[11px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60 mb-3">
           RoopRas v1.3 &bull; Minimalist Generative Interface
         </p>
-        <p className="text-[8px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
+        <p className="text-[10px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
           Note: Standard security warnings on shared links are a platform feature of AI Studio. 
           This app is safe and uses official Google Gemini models.
         </p>
