@@ -49,7 +49,13 @@ export const generateRandomNotionFace = async (): Promise<any> => {
       }
     } catch (error: any) {
       lastError = error;
-      console.warn(`Attempt failed for ${modelName}:`, error.message);
+      const msg = error.message?.toLowerCase() || "";
+      console.warn(`Attempt failed for ${modelName}:`, msg);
+      
+      // If it's a permission error, don't even try other models, just fail fast
+      if (msg.includes("permission") || msg.includes("403") || msg.includes("unauthorized")) {
+        throw new Error("Please make sure you are logged into your Google Account.");
+      }
       continue;
     }
   }

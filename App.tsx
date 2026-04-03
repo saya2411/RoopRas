@@ -19,8 +19,10 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [errorDetails, setErrorDetails] = useState<any>(null);
   const [loadingStep, setLoadingStep] = useState(0);
+  const loadingRef = useRef(false);
 
   useEffect(() => {
+    loadingRef.current = loading;
     let interval: NodeJS.Timeout;
     if (loading) {
       setLoadingStep(0);
@@ -35,8 +37,18 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     setErrorDetails(null);
+
+    // Create a timeout to prevent getting stuck if the platform blocks the request
+    const timeoutId = setTimeout(() => {
+      if (loadingRef.current) {
+        setLoading(false);
+        setError("Please make sure you are logged into your Google Account.");
+      }
+    }, 8000);
+
     try {
       const result = await generateRandomNotionFace();
+      clearTimeout(timeoutId);
       if (result && result.data) {
         setResultImage(result.data);
         setRecentRoops((prev) => {
@@ -50,7 +62,7 @@ const App: React.FC = () => {
       let friendlyMessage = err.message || "Failed to generate.";
       
       if (friendlyMessage.toLowerCase().includes("permission") || friendlyMessage.includes("403")) {
-        friendlyMessage = "Permission Denied. Please make sure you are logged into your Google Account to use this shared app, or try a different browser.";
+        friendlyMessage = "Please make sure you are logged into your Google Account.";
       } else if (friendlyMessage.toLowerCase().includes("quota") || friendlyMessage.includes("429")) {
         friendlyMessage = "The daily limit for this app has been reached. Please try again later.";
       } else if (friendlyMessage.toLowerCase().includes("region")) {
@@ -197,11 +209,27 @@ const App: React.FC = () => {
         )}
 
         {error && (
-          <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full overflow-hidden">
+          <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full overflow-hidden relative">
             <div className="font-bold uppercase mb-1">ERROR: {error}</div>
-            {error.includes("Permission Denied") && (
-              <div className="mt-2 font-bold text-red-800 animate-pulse">
-                TIP: Try logging into your Google Account and refreshing the page!
+            {error.includes("Please make sure you are logged into your Google Account") && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-white/95 backdrop-blur-md animate-in fade-in duration-300">
+                <div className="max-w-sm w-full bg-white border-4 border-black p-8 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] text-center">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-black">
+                    <span className="text-3xl">👤</span>
+                  </div>
+                  <h2 className="text-2xl font-black uppercase tracking-tighter mb-4 italic">Login Required</h2>
+                  <p className="text-sm font-bold text-gray-600 leading-relaxed mb-8">
+                    To use this shared app, Google requires you to be logged into your account.
+                    <br/><br/>
+                    <span className="text-black underline decoration-2 underline-offset-4">Please log in to your Google Account and refresh this page.</span>
+                  </p>
+                  <button 
+                    onClick={() => window.location.reload()}
+                    className="w-full py-4 bg-black text-white font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black border-2 border-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
+                  >
+                    Refresh Page
+                  </button>
+                </div>
               </div>
             )}
             {errorDetails && (
