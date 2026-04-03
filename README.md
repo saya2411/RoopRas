@@ -11,6 +11,16 @@ RoopRas is a minimalist generative interface designed to create unique, Notion-s
 - **Instant Export:** Download your generated avatars directly as PNG files.
 - **Powered by Gemini:** Uses the latest `gemini-3.1-flash-image-preview` and `gemini-3-pro-image-preview` models for high-quality, fast image generation.
 
+## 🌟 Why RoopRas?
+
+In a world of complex AI tools, RoopRas stands out by doing one thing exceptionally well: creating beautiful, minimalist digital identities.
+
+- **Instant Identity:** Generate a unique, professional-looking avatar in seconds with a single click.
+- **Privacy First:** No personal data, photos, or accounts required. Your identity is generated from scratch by AI.
+- **Minimalist Aesthetic:** Perfect for Notion, Slack, GitHub, or any platform where you want a clean, modern, and distraction-free look.
+- **Creative Inspiration:** Use generated "Roops" as a starting point for your own character designs or artistic projects.
+- **Zero Friction:** No complex prompts, settings, or sliders. We've tuned the AI to deliver high-quality results every time.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
