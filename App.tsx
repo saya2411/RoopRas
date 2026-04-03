@@ -17,6 +17,7 @@ const App: React.FC = () => {
   const [showGallery, setShowGallery] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorDetails, setErrorDetails] = useState<any>(null);
   const [loadingStep, setLoadingStep] = useState(0);
 
   useEffect(() => {
@@ -33,19 +34,24 @@ const App: React.FC = () => {
   const handleProcess = async () => {
     setLoading(true);
     setError(null);
+    setErrorDetails(null);
     try {
-      const res = await generateRandomNotionFace('gemini-2.5-flash-image');
-      if (res) {
-        setResultImage(res);
+      const result = await generateRandomNotionFace();
+      if (result && result.data) {
+        setResultImage(result.data);
         setRecentRoops((prev) => {
-          if (prev[0] === res) return prev;
-          return [res, ...prev].slice(0, 5);
+          if (prev[0] === result.data) return prev;
+          return [result.data, ...prev].slice(0, 5);
         });
       }
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Generation error:", err);
-      if (err instanceof Error) {
-        setError(`Failed to generate: ${err.message}`);
+      setError(err.message || "Failed to generate.");
+      if (err.details || err.tried) {
+        setErrorDetails({
+          details: err.details,
+          tried: err.tried
+        });
       }
     } finally {
       setLoading(false);
@@ -180,8 +186,18 @@ const App: React.FC = () => {
         )}
 
         {error && (
-          <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full">
-            <span className="font-bold uppercase">ERROR:</span> {error}
+          <div className="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-[10px] font-mono leading-tight w-full overflow-hidden">
+            <div className="font-bold uppercase mb-1">ERROR: {error}</div>
+            {errorDetails && (
+              <div className="opacity-70 mt-2 space-y-1">
+                {errorDetails.tried && (
+                  <div>TRIED: {errorDetails.tried.model} (Key: {errorDetails.tried.key})</div>
+                )}
+                {errorDetails.details && (
+                  <div className="break-words">DETAILS: {errorDetails.details}</div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
