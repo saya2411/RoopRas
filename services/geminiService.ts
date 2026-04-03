@@ -24,8 +24,11 @@ export const generateRandomNotionFace = async (modelName: string): Promise<strin
     }
   }
 
-  if (apiKeys.length === 0 && process.env.API_KEY) {
-    apiKeys.push(process.env.API_KEY);
+  if (apiKeys.length === 0) {
+    const fallbackKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+    if (fallbackKey) {
+      apiKeys.push(fallbackKey);
+    }
   }
 
   if (apiKeys.length === 0) {
