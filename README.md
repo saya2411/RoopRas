@@ -15,9 +15,9 @@ RoopRas is a minimalist generative interface designed to create unique, Notion-s
 
 In a world of complex AI tools, RoopRas stands out by doing one thing exceptionally well: creating beautiful, minimalist digital identities.
 
-- **Instant Identity:** Generate a unique, professional-looking avatar in seconds with a single click.
-- **Privacy First:** No personal data, photos, or accounts required. Your identity is generated from scratch by AI.
-- **Minimalist Aesthetic:** Perfect for Notion, Slack, GitHub, or any platform where you want a clean, modern, and distraction-free look.
+- **Just for Fun:** RoopRas isn't about professional headshots—it's about creative, quirky, and abstract art. It's built for pure fun and experimentation.
+- **Privacy with Style:** Perfect for gaming profiles, Discord, or any social platform where you want to keep your face private while maintaining a cool, aesthetic vibe.
+- **Minimalist Vibe:** Ideal for anyone who loves the clean, hand-drawn look and wants a unique digital identity that stands out from the crowd.
 - **Creative Inspiration:** Use generated "Roops" as a starting point for your own character designs or artistic projects.
 - **Zero Friction:** No complex prompts, settings, or sliders. We've tuned the AI to deliver high-quality results every time.
 
