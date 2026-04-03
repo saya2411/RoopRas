@@ -38,17 +38,8 @@ const App: React.FC = () => {
     setError(null);
     setErrorDetails(null);
 
-    // Create a timeout to prevent getting stuck if the platform blocks the request
-    const timeoutId = setTimeout(() => {
-      if (loadingRef.current) {
-        setLoading(false);
-        setError("Please make sure you are logged into your Google Account.");
-      }
-    }, 8000);
-
     try {
       const result = await generateRandomNotionFace();
-      clearTimeout(timeoutId);
       if (result && result.data) {
         setResultImage(result.data);
         setRecentRoops((prev) => {
@@ -61,9 +52,7 @@ const App: React.FC = () => {
       
       let friendlyMessage = err.message || "Failed to generate.";
       
-      if (friendlyMessage.toLowerCase().includes("permission") || friendlyMessage.includes("403")) {
-        friendlyMessage = "Please make sure you are logged into your Google Account.";
-      } else if (friendlyMessage.toLowerCase().includes("quota") || friendlyMessage.includes("429")) {
+      if (friendlyMessage.toLowerCase().includes("quota") || friendlyMessage.includes("429")) {
         friendlyMessage = "The daily limit for this app has been reached. Please try again later.";
       } else if (friendlyMessage.toLowerCase().includes("region")) {
         friendlyMessage = "Image generation might not be available in your current region yet.";
@@ -229,7 +218,7 @@ const App: React.FC = () => {
         <p className="text-[11px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60 mb-3">
           RoopRas v1.3 &bull; Minimalist Generative Interface
         </p>
-        <p className="text-[10px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
+        <p className="text-[12px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
           Note: Standard security warnings on shared links are a platform feature of AI Studio. 
           This app is safe and uses official Google Gemini models.
         </p>
