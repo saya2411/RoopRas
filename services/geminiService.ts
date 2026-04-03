@@ -80,9 +80,10 @@ export const generateRandomNotionFace = async (modelName: string): Promise<strin
       lastError = error;
       const errorMessage = error?.message || String(error);
       const isRateLimit = errorMessage.includes('429') || error?.status === 429 || errorMessage.toLowerCase().includes('rate limit');
+      const isNoQuota = errorMessage.toLowerCase().includes('limit: 0') || errorMessage.toLowerCase().includes('quota exceeded');
       
-      if (isRateLimit) {
-        console.warn(`Key ${index + 1} is rate limited. Google says: "${errorMessage}". Trying next...`);
+      if (isRateLimit || isNoQuota) {
+        console.warn(`Key ${index + 1} is unusable. Reason: "${errorMessage}". Trying next...`);
         continue;
       }
       
