@@ -1,15 +1,16 @@
-# RoopRas - The Essence of Form
+# RoopRas - The Essence of Form (v1.3)
 
-RoopRas is a minimalist generative interface designed to create unique, Notion-style avatars (Roops) with a single click. Built with React, Tailwind CSS, and powered by Google's latest Gemini 3.1 Flash Image model, it offers a clean and focused experience for generating abstract, high-contrast digital identities.
+RoopRas is a minimalist generative interface designed to create unique, Notion-style avatars (Roops) with a single click. Built with React, Tailwind CSS, and powered by Google's Gemini 2.5 Flash Image model, it offers a clean and focused experience for generating abstract, high-contrast digital identities.
 
 ## ✨ Features
 
 - **Minimalist Generation:** Create abstract, black-and-white avatars inspired by the "Notion Faces" aesthetic.
+- **Dynamic Shapes:** Now supports both **rounded-square** and **perfectly circular** head shapes for more variety.
 - **Recent Roops Gallery:** Keep track of your last 5 generations for quick viewing and downloading.
 - **Themed Loading Experience:** Watch your "Roop" come to life with a themed loading sequence (Adding Primer, Applying Foundation, Final Glow, etc.).
-- **Brutalist UI:** A bold, high-contrast interface with thick borders and sharp shadows.
+- **Brutalist UI:** A bold, high-contrast interface with thick borders, sharp shadows, and refined rounded corners.
 - **Instant Export:** Download your generated avatars directly as PNG files.
-- **Powered by Gemini:** Uses the latest `gemini-3.1-flash-image-preview` and `gemini-3-pro-image-preview` models for high-quality, fast image generation.
+- **Optimized for Sharing:** Specifically tuned to work seamlessly on AI Studio shared links using the `gemini-2.5-flash-image` model.
 
 ## 🌟 Why RoopRas?
 
@@ -18,7 +19,6 @@ In a world of complex AI tools, RoopRas stands out by doing one thing exceptiona
 - **Just for Fun:** RoopRas isn't about professional headshots—it's about creative, quirky, and abstract art. It's built for pure fun and experimentation.
 - **Privacy with Style:** Perfect for gaming profiles, Discord, or any social platform where you want to keep your face private while maintaining a cool, aesthetic vibe.
 - **Minimalist Vibe:** Ideal for anyone who loves the clean, hand-drawn look and wants a unique digital identity that stands out from the crowd.
-- **Creative Inspiration:** Use generated "Roops" as a starting point for your own character designs or artistic projects.
 - **Zero Friction:** No complex prompts, settings, or sliders. We've tuned the AI to deliver high-quality results every time.
 
 ## 🚀 Getting Started
@@ -44,7 +44,7 @@ In a world of complex AI tools, RoopRas stands out by doing one thing exceptiona
 3. Set up your environment variables:
    Create a `.env` file in the root directory and add your Gemini API key:
    ```env
-   VITE_API_KEY=your_gemini_api_key_here
+   GEMINI_API_KEY=your_gemini_api_key_here
    ```
 
 4. Start the development server:
@@ -57,17 +57,16 @@ In a world of complex AI tools, RoopRas stands out by doing one thing exceptiona
 ## 🛠️ Tech Stack
 
 - **Frontend:** React, TypeScript, Tailwind CSS
-- **Animations:** Motion (motion/react)
-- **AI Integration:** @google/genai (Gemini 3.1 & 3.0 Image Models)
-- **Icons:** Lucide React
+- **AI Integration:** @google/genai (Gemini 2.5 Flash Image)
+- **Styling:** Brutalist Minimalist with custom rounded aesthetics.
 
 ## 🎨 Design Philosophy
 
-RoopRas follows a "Brutalist Minimalist" design language. It celebrates structure, bold typography, and a restricted color palette to keep the focus entirely on the generative art.
+RoopRas follows a "Brutalist Minimalist" design language. It celebrates structure, bold typography, and a restricted color palette to keep the focus entirely on the generative art. Version 1.3 introduces a "Soft Brutalist" touch with refined rounded corners on containers and avatars.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
