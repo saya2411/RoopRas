@@ -13,20 +13,13 @@ const LOADING_STEPS = [
 
 const App: React.FC = () => {
   const [resultImage, setResultImage] = useState<string | null>(null);
-  const [recentRoops, setRecentRoops] = useState<string[]>(() => {
-    const saved = localStorage.getItem('recentRoops');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [recentRoops, setRecentRoops] = useState<string[]>([]);
   const [showGallery, setShowGallery] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorDetails, setErrorDetails] = useState<any>(null);
   const [loadingStep, setLoadingStep] = useState(0);
   const loadingRef = useRef(false);
-
-  useEffect(() => {
-    localStorage.setItem('recentRoops', JSON.stringify(recentRoops));
-  }, [recentRoops]);
 
   useEffect(() => {
     loadingRef.current = loading;
@@ -60,7 +53,7 @@ const App: React.FC = () => {
       let friendlyMessage = err.message || "Failed to generate.";
       
       if (friendlyMessage.toLowerCase().includes("quota") || friendlyMessage.includes("429")) {
-        friendlyMessage = "The daily limit for image generation has been reached for this API key. Please try again tomorrow or check your Google AI Studio quota.";
+        friendlyMessage = "The daily limit for this app has been reached. Please try again later.";
       } else if (friendlyMessage.toLowerCase().includes("region")) {
         friendlyMessage = "Image generation might not be available in your current region yet.";
       }
@@ -94,7 +87,7 @@ const App: React.FC = () => {
         <div className="w-full mb-10 flex flex-col items-center">
           <div className="flex flex-col items-center w-full max-w-[320px]">
             <h2 className="text-xs font-black uppercase mb-4 tracking-widest text-gray-400">The Result</h2>
-            <div className="w-full aspect-square border-2 border-black rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+            <div className="w-full aspect-square border-2 border-black rounded-3xl bg-gray-50 flex items-center justify-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
               {loading ? (
                 <div className="text-center">
                   <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -116,7 +109,7 @@ const App: React.FC = () => {
           <button
             onClick={handleProcess}
             disabled={loading}
-            className={`w-full py-5 border-2 border-black font-black text-sm uppercase tracking-widest transition-all
+            className={`w-full py-5 border-2 border-black font-black text-sm uppercase tracking-widest transition-all rounded-xl
               ${loading
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed translate-y-1 shadow-none'
                 : 'bg-black text-white hover:bg-white hover:text-black active:translate-y-1 active:shadow-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'
@@ -130,13 +123,13 @@ const App: React.FC = () => {
               <a
                 href={`data:image/png;base64,${resultImage}`}
                 download="roopras.png"
-                className="flex-1 text-center py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none bg-white" 
+                className="flex-1 text-center py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none bg-white rounded-lg" 
               >
                 Download Export
               </a>
               <button 
                 onClick={() => setResultImage(null)}
-                className="px-6 py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest bg-gray-100 hover:bg-white"
+                className="px-6 py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest bg-gray-100 hover:bg-white rounded-lg"
               >
                 Reset
               </button>
@@ -146,7 +139,7 @@ const App: React.FC = () => {
           {recentRoops.length > 0 && (
             <button
               onClick={() => setShowGallery(true)}
-              className="w-full py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest bg-white hover:bg-gray-50 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none"
+              className="w-full py-3 border-2 border-black text-black font-bold text-[10px] uppercase tracking-widest bg-white hover:bg-gray-50 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none rounded-lg"
             >
               Recent Roops
             </button>
@@ -155,10 +148,10 @@ const App: React.FC = () => {
 
         {showGallery && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <div className="bg-white border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] rounded-2xl p-8 w-full max-w-md relative animate-in fade-in zoom-in duration-200">
+            <div className="bg-white border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] rounded-[2.5rem] p-8 w-full max-w-md relative animate-in fade-in zoom-in duration-200">
               <button 
                 onClick={() => setShowGallery(false)}
-                className="absolute top-4 right-4 w-8 h-8 border-2 border-black flex items-center justify-center font-black hover:bg-black hover:text-white transition-colors"
+                className="absolute top-4 right-4 w-8 h-8 border-2 border-black flex items-center justify-center font-black hover:bg-black hover:text-white transition-colors rounded-lg"
               >
                 &times;
               </button>
@@ -178,14 +171,14 @@ const App: React.FC = () => {
                     <div className="flex-1 flex flex-col gap-2">
                       <button
                         onClick={() => selectFromGallery(img)}
-                        className="text-[10px] font-black uppercase tracking-widest text-left hover:underline"
+                        className="text-[10px] font-black uppercase tracking-widest text-left hover:underline bg-gray-100 px-2 py-1 rounded-md"
                       >
                         View in Main
                       </button>
                       <a
                         href={`data:image/png;base64,${img}`}
                         download={`roopras-${idx}.png`}
-                        className="text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-black transition-colors"
+                        className="text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-black transition-colors bg-gray-50 px-2 py-1 rounded-md text-center"
                       >
                         Download
                       </a>
@@ -225,7 +218,7 @@ const App: React.FC = () => {
         <p className="text-[11px] text-gray-400 uppercase tracking-[0.4em] font-black opacity-60 mb-3">
           RoopRas v1.3 &bull; Minimalist Generative Interface
         </p>
-        <p className="text-[14px] text-gray-400 max-w-xs mx-auto leading-relaxed opacity-40">
+        <p className="text-[10px] text-gray-400 leading-relaxed opacity-40 uppercase tracking-[0.1em]">
           Note: Standard security warnings on shared links are a platform feature of AI Studio. 
           This app is safe and uses official Google Gemini models.
         </p>
