@@ -1,4 +1,4 @@
-# RoopRas - The Essence of Form (v1.3)
+# RoopRas - The Essence of Form
 
 RoopRas is a minimalist generative interface designed to create unique, Notion-style avatars (Roops) with a single click. Built with React, Tailwind CSS, and powered by Google's Gemini 2.5 Flash Image model, it offers a clean and focused experience for generating abstract, high-contrast digital identities.
 
