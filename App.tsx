@@ -13,13 +13,20 @@ const LOADING_STEPS = [
 
 const App: React.FC = () => {
   const [resultImage, setResultImage] = useState<string | null>(null);
-  const [recentRoops, setRecentRoops] = useState<string[]>([]);
+  const [recentRoops, setRecentRoops] = useState<string[]>(() => {
+    const saved = localStorage.getItem('recentRoops');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [showGallery, setShowGallery] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorDetails, setErrorDetails] = useState<any>(null);
   const [loadingStep, setLoadingStep] = useState(0);
   const loadingRef = useRef(false);
+
+  useEffect(() => {
+    localStorage.setItem('recentRoops', JSON.stringify(recentRoops));
+  }, [recentRoops]);
 
   useEffect(() => {
     loadingRef.current = loading;
@@ -53,7 +60,7 @@ const App: React.FC = () => {
       let friendlyMessage = err.message || "Failed to generate.";
       
       if (friendlyMessage.toLowerCase().includes("quota") || friendlyMessage.includes("429")) {
-        friendlyMessage = "The daily limit for this app has been reached. Please try again later.";
+        friendlyMessage = "The daily limit for image generation has been reached for this API key. Please try again tomorrow or check your Google AI Studio quota.";
       } else if (friendlyMessage.toLowerCase().includes("region")) {
         friendlyMessage = "Image generation might not be available in your current region yet.";
       }
