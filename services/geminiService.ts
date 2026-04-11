@@ -4,8 +4,8 @@ import { GoogleGenAI } from "@google/genai";
  * Generates a random Notion Faces-style avatar.
  */
 export const generateRandomNotionFace = async (): Promise<any> => {
-  // Use the built-in Gemini API key provided by the AI Studio environment
-  const apiKey = process.env.GEMINI_API_KEY;
+  // Try to get the key from Vite's standard env (Vercel) or fallback to process.env (AI Studio)
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
     throw new Error("Gemini API key not found. If you are running this outside of AI Studio, please set the GEMINI_API_KEY environment variable.");
